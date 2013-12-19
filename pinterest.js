@@ -17,11 +17,6 @@ var casper = require('casper').create({
 });
 
 
-if( casper.cli.has('account') ) {
-  var account_url = casper.cli.raw.get('account');
-
-}
-
 if( casper.cli.has('board') ) {
   var board_url = casper.cli.raw.get('board');
   getboard(board_url);

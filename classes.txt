@@ -1,3 +1,0 @@
-GridFooter Module centeredWithinWrapper showGridLoading
-
-GridFooter Module centeredWithinWrapper
