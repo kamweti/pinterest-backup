@@ -8,7 +8,7 @@ This script depends on
 
 Running the script
 
-    $ casperjs pinterest.js --board=http://{url-to-pinterest-board}``
+    $ casperjs pinterest.js --board=http://{url-to-pinterest-board}
 
 All backups are stored in the backup/ directory
 
