@@ -1,0 +1,9 @@
+[x] backing up a specific board
+[x] error handling and picking up the backup from where it left off
+[x] srolling to the bottom for all pins to load
+[x] create business canvas, pricing and all
+[x] create technical canvas, how long does it take to backup board
+[x] create minimal web application, with pinterest login?
+[x] scheduling backups
+[x] are all pins on pinterest stored as pngs?
+[x] is there a way to write data to a png in node.js-this would prevent file/database access
