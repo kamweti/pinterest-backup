@@ -1,4 +1,4 @@
-var board, visiblepins, pins = [];
+var board, visiblepins, backup_folder_name, pins = [];
 
 var fs = require('fs');
 
@@ -49,13 +49,16 @@ function tryAndScroll(casper){
     }
   }, function() {
     this.echo("Scrolling failed. Sorry.").exit();
-  });
+  }, 5000);
 }
 
 function getboard(url){
   // might be good to validate the url here
   casper
     .start(url, function(){
+
+      var d = new Date();
+      var _string_timestamp = d.getFullYear()+'-'+d.getMonth()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
 
       board = this.evaluate(function(){
         return  {
@@ -64,6 +67,8 @@ function getboard(url){
         };
       });
 
+      backup_folder_name = _string_timestamp +' '+ board.name; //folder name: {timestamp} {board name}
+
       visiblepins = this.evaluate(function(){
         return document.querySelectorAll('.item .pinWrapper').length;
       });
@@ -71,7 +76,8 @@ function getboard(url){
       if( visiblepins < board.totalpins ) {
         tryAndScroll(this); //scroll down the board
       }
-
+    })
+    .then(function(){
       //all clear now
       //create an object of all pins
       pins = this.evaluate(function(){
@@ -87,8 +93,6 @@ function getboard(url){
         });
       });
 
-    })
-    .then(function(){
       casper.each(pins, function(self, pin){
         // click on each pin
         self.then(function(){
@@ -106,15 +110,33 @@ function getboard(url){
             });
             var _filename = pin_image_src.split('/').pop(); //splits url to array, pops lat index
 
-            casper.download(pin_image_src, 'backup/'+board.name+'/'+_filename);
+
+            casper.download(pin_image_src, 'backup/'+backup_folder_name+'/'+_filename);
+
+            if (fs.exists('backup/'+backup_folder_name+'/'+_filename)) {
+              board.downloaded_pins = board.downloaded_pins || [];
+
+              //record this pin has been downloaded
+              board.downloaded_pins.push({
+                'title' : pin.name,
+                'url' : pin.link,
+                'image_name' : _filename,
+              });
+
+            }
 
           }, function() {
             this.echo("Failed to load one or more pins, please try again later").exit();
           }, 5000);
         });
-        
-      })
+      });
+
     })
+    .then(function(){
+      // once the backup is done, store a json containing the 
+      // backup data
+      fs.write('backup/' + backup_folder_name + '/backup.json', JSON.stringify(board), 'w');
+    });
 
 }
 
