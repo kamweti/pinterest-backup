@@ -110,9 +110,9 @@ function getboard(url){
 
           }, function() {
             this.echo("Failed to load one or more pins, please try again later").exit();
-          }, 5000)
+          }, 5000);
         });
-
+        
       })
     })
 
