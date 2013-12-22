@@ -44,7 +44,7 @@ function tryAndScroll(casper){
     }
   }, function() {
     this.echo("Scrolling failed. Sorry.").exit();
-  }, 5000);
+  }, 20000);
 }
 
 function getboard(url){
@@ -76,13 +76,24 @@ function getboard(url){
       //all clear now
       //create an object of all pins
       pins = this.evaluate(function(){
+
         var pinelems = document.querySelectorAll('.item .pinWrapper');
 
+        var index = 0;
         return [].map.call(pinelems, function(elem, index){
+
+          // there are times when there is no pin description
+          var _decription = elem.querySelector('.pinMeta .pinDescription');
+          if( _decription ) {
+            pin_title = _decription.textContent;
+          } else {
+            pin_title = '';
+          }
+
           index++; //increment index since there is no child index 0
           return {
             'click_target' : '.item:nth-child('+index+') .pinImageWrapper',
-            'name' : elem.querySelector('.pinMeta .pinDescription').textContent,
+            'name' : pin_title,
             'link' : 'https://pinterest.com' + elem.querySelector('.pinImageWrapper').getAttribute('href')
           };
         });
