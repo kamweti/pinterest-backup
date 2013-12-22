@@ -53,7 +53,7 @@ function getboard(url){
     .start(url, function(){
 
       var d = new Date();
-      var _string_timestamp = d.getFullYear()+'-'+d.getMonth()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+      var _string_timestamp = d.getFullYear()+'-'+d.getMonth()+' '+d.getHours()+'-'+d.getMinutes()+'-'+d.getSeconds();
 
       board = this.evaluate(function(){
         return  {
@@ -83,7 +83,7 @@ function getboard(url){
           return {
             'click_target' : '.item:nth-child('+index+') .pinImageWrapper',
             'name' : elem.querySelector('.pinMeta .pinDescription').textContent,
-            'link' : 'https://pinterest.com/' + elem.querySelector('.pinImageWrapper').getAttribute('href')
+            'link' : 'https://pinterest.com' + elem.querySelector('.pinImageWrapper').getAttribute('href')
           };
         });
       });
@@ -128,7 +128,7 @@ function getboard(url){
 
     })
     .then(function(){
-      // once the backup is done, store a json containing the 
+      // once the backup is done, store a json containing the
       // backup data
       fs.write('backup/' + backup_folder_name + '/backup.json', JSON.stringify(board), 'w');
     });
