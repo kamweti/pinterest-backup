@@ -79,7 +79,6 @@ function getboard(url){
 
         var pinelems = document.querySelectorAll('.item .pinWrapper');
 
-        var index = 0;
         return [].map.call(pinelems, function(elem, index){
 
           // there are times when there is no pin description
@@ -132,7 +131,7 @@ function getboard(url){
             }
 
           }, function() {
-            this.echo("Failed to load one or more pins, please try again later").exit();
+            this.echo("Failed to load one or more pins, please try again later");
           }, 5000);
         });
       });
@@ -145,6 +144,9 @@ function getboard(url){
     });
 
 }
+casper.run(function(){
+  this.echo(board.downloaded_pins.length + '/'+board.totalpins+' pins downloaded to backup/'+backup_folder_name +'/');
+  this.exit();
+});
 
-casper.run();
 
